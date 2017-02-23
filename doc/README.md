@@ -15,7 +15,7 @@ This example gives a base template to deploy a multi-pod ManageIQ appliance with
 
 ###Cluster Sizing
 
-In order to avoid random deployment failures due to resource starvation, we recommend a minimum cluster size for a *test* environment.
+In order to avoid random deployment failures due to resource starvation, we recommend a minimum cluster size for a **test** environment.
 
 * 1 x Master node with at least 8 VCPUs and 12GB of RAM
 * 2 x Nodes with at least 4 VCPUs and 8GB of RAM
