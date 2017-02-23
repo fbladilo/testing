@@ -4,7 +4,7 @@
 **This guide will demo deploying ManageIQ in OpenShift as its example use-case but this method could actually be used in a different container cluster environment**
 
 ##Purpose
-
+==========
 This example gives a base template to deploy a multi-pod ManageIQ appliance with the DB stored in a persistent volume on OpenShift. It provides a step-by-step setup including cluster administrative tasks as well as basic user information and commands. The ultimate goal of the project is to be able to decompose the ManageIQ appliance into several containers running on a pod or a series of pods.
 
 ###Prerequisites:
@@ -21,11 +21,7 @@ In order to avoid random deployment failures due to resource starvation, we reco
 * 2 x Nodes with at least 4 VCPUs and 8GB of RAM
 * 1 x NFS server with at least 10GB of space for PV use
 
-
-
-
-
-* Additional sizing considerations : 
+Additional sizing considerations : 
 
   * Recommendations assume MIQ will be the only application running on this cluster.
   * Alternatively, you can provision an infrastructure node to run registry/metrics/router/logging pods.
