@@ -21,6 +21,7 @@ In order to avoid random deployment failures due to resource starvation, we reco
 * 2 x Nodes with at least 4 VCPUs and 8GB of RAM
 * 1 x NFS server with at least 10GB of space for PV use
 
+
 * Additional sizing considerations : 
 
   * Recommendations assume MIQ will be the only application running on this cluster.
