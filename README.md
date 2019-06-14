@@ -11,7 +11,7 @@ End to end tests for OCP 3 to 4 Migration
 
 ## Mig-controller config variables
 
-A number of parameters need to be set with the correct environment in order to create the CRs for migration purposes. A [sample](https://github.com/fusor/mig-e2e/config/mig_controller.yml.example) file is supplied, *please make changes as necessary*.
+A number of parameters need to be set with the correct environment in order to create the CRs for migration purposes. A [sample](https://github.com/fusor/mig-e2e/config/mig_controller.yml.example) file is supplied, **please make changes as necessary**
 
 See below for a decription of these paremeters :
 
