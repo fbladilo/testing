@@ -10,12 +10,12 @@ This repo contains ansible and CI related assets used for the OCP 3 to 4 migrati
 Jenkins pipelines are used to provide the logic necessary to orchestrate the build and execution of CI workflows. Each pipeline job can be parameterized to customize the behavior for the intended workflow, they are also in charge of providing notifications for each build, below are the supplied  [mig CI pipelines](https://github.com/fusor/mig-ci/tree/master/pipeline) with a brief description:
 
 | Pipeline | Purpose |
-| --- | -- |
-| `ocp3-agnosticd-base.groovy` | Deploys OCP3 using agnosticd, performs cluster sanity checks, multi-node cluster support |
-| `ocp3-oa-base.groovy` | Deploys OCP3 using openshift ansible, performs cluster sanity checks, all-in-one cluster |
-| `ocp3-origin3-dev-base.groovy` | Deploys OCP3 using [origin3-dev](https://github.com/fusor/origin3-dev.git), all-in-one cluster |
-| `ocp4-base.groovy` | Deploys OCP4 and performs cluster sanity checks |
-| `parallel-base.groovy` | Deploys OCP3, OCP4, NFS server in parallel, installs cluster application migration tools and executes e2e migration tests|
+| --- | --- |
+| `ocp3-agnosticd-base` | Deploys OCP3 using agnosticd, performs cluster sanity checks, multi-node cluster support |
+| `ocp3-oa-base` | Deploys OCP3 using openshift ansible, performs cluster sanity checks, all-in-one cluster |
+| `ocp3-origin3-dev-base` | Deploys OCP3 using [origin3-dev](https://github.com/fusor/origin3-dev.git), all-in-one cluster |
+| `ocp4-base` | Deploys OCP4 and performs cluster sanity checks |
+| `parallel-base` | Deploys OCP3, OCP4, NFS server in parallel, installs cluster application migration tools and executes e2e migration tests|
 
 ### Pipeline CI jobs logic
 
