@@ -58,7 +58,7 @@ The `EC2_TERMINATE_INSTANCES` and `CLEAN_WORKSPACE` boolean parameters can be us
 
 ## External NFS server setup on AWS
 
-In order to demonstrate the migration of PV resources, you can deploy an external NFS server on AWS. The server will have a public IP, and could be pointed from both locations - source OCP3 and target OCP4 based clusters.
+In order to demonstrate the migration of PV resources, you can deploy an external NFS server on AWS. The server will have a public IP, and could be pointed from both locations - source OCP3 and target OCP4 clusters.
 
 Instance creation and NFS server setup is handled by the following command:
 - `ansible-playbook nfs_server_deploy.yml`
@@ -70,7 +70,7 @@ This task could be executed on every cluster that will need access to the NFS se
 When you are finished, just run the playbook to destroy NFS AWS instance:
 - `ansible-playbook nfs_server_destroy.yml`
 
-These playbooks have been validated with both [all-in-one](https://github.com/fusor/mig-ci#ocp3-all-in-one-deployment-on-aws) AWS deployment, and [origin3-dev](https://github.com/fusor/origin3-dev/).
+These playbooks have been validated with both [all-in-one AWS deployment](https://github.com/fusor/mig-ci#ocp3-all-in-one-deployment-on-aws) and [origin3-dev](https://github.com/fusor/origin3-dev/).
 
 ## OCP3 agnosticd multinode in AWS
 
@@ -78,37 +78,35 @@ This type of deployment is used in [parallel-base](https://github.com/fusor/mig-
 
 ## OCP3 OA all-in-one deployment on AWS
 
-In order to execute an OCP3 all-in-one deployment, you should specify several environment variables.
-
-Customer environment is expected to be based on RHEL distributions. By default the RHEL 7 does not have an access to the [official OpenShift bits](https://docs.openshift.com/enterprise/3.0/install_config/install/prerequisites.html#software-prerequisites) for the OA deployment, so you need to setup a valid account with those subscriptions by following variables:
+In order to execute an OCP3 all-in-one deployment, you need to define several environment variables.
 
 Task specific:
 
-- `OCP3_VERSION` - verison of cluster to be provisioned. Should be specified as 'v3\.[0-9]+'. If not set, will be used 'v3.11'.
+- `OCP3_VERSION` - version of cluster to be provisioned. Should be specified as 'v3\.[0-9]+'. If not set, will be used 'v3.11'.
 
-- `WORKSPACE` - from [other variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables). You should create a directory `$WORKSPACE/keys` and place there your AWS ssh private key, which will be supplied to the newly created instance. The name of the key is captured from `$EC2_KEY`.
-  - The result ssh private key file will should be discoverable in `${WORKSPACE}/keys/${EC2_KEY}.pem`. You can use it after that, to access the instance via ssh.
+- `WORKSPACE` - from [other variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables). Create a directory in `$WORKSPACE/keys` and save your AWS ssh private key, it will be used on the newly created instance. The name of the key is captured from `$EC2_KEY`.
+  - The ssh private key file should be accessible in `${WORKSPACE}/keys/${EC2_KEY}.pem`. This key can be used to ssh into the instance once is deployed.
 
 ### Deploying OA cluster outside of CI :
 
-- Setup all of the [environment variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables), including specific for this task, mentioned in the previous paragraph.
+- Setup all of the required [environment variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables), including the ones mentioned in the previous paragraph.
 
 - To deploy an OA `ansible-playbook deploy_ocp3_cluster.yml -e prefix=name_for_instance`. You can specify deployment type with `-e oa_deployment_type=openshift-enterprise/origin`. Default is the enterprise one. When prefix is not specified, you `ansible_user` variable will be used.
 
-If you want to select the downstream version of openshift, you can add `-e oa_deployment_type=origin` tag to previous step.
+If you want to select the upstream version of openshift, you can add `-e oa_deployment_type=origin` tag to previous step.
 
 - To destroy the instance and all attached resources `ansible-playbook destroy_ocp3_cluster.yml -e prefix=name_for_instance`.
 
 Deployment usually takes around 40-80 minutes to complete. Logs are written in `$WORKSPACE/.install.log` file upon completion.
 
-In case that you don't want to specify environment variables, every `deploy*` and `destroy*` playbook could be run with config file located in `/config/adhoc_vars.yml`.
+In case that you don't want to set environment variables for every `deploy*` and `destroy*`, the playbook could be run with an external vars file located in `/config/adhoc_vars.yml`.
 
 Example:
 
 - `ansible-playbook deploy_ocp3_cluster.yml -e @config/adhoc_vars.yml`
-- `ansible-playbook deploy_ocp4_cluster.yml -e @config/adhoc_vars.yml`
 - `ansible-playbook destroy_ocp3_cluster.yml -e @config/adhoc_vars.yml`
-- `ansible-playbook destroy_ocp4_cluster.yml -e @config/adhoc_vars.yml`
+
+_**Note:**_ Customer OCP environments are expected to be based on RHEL distributions. By default the RHEL7 does not have an access to the [official OpenShift bits](https://docs.openshift.com/enterprise/3.0/install_config/install/prerequisites.html#software-prerequisites) for the OA deployment. You must supply a RH account with a subscription that has access to the OCP official bits.
 
 ### List of other environment variables:
 
