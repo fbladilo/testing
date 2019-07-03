@@ -78,18 +78,17 @@ This type of deployment is used in [parallel-base](https://github.com/fusor/mig-
 
 ## OCP3 OA all-in-one deployment on AWS
 
-In order to execute an OCP3 all-in-one deployment, you need to define several environment variables.
+In order to execute an OCP3 all-in-one deployment, you need to supply SSH keys and define several environmental variables:
 
 Pre-requirements :
 
-- `OCP3_VERSION` - version of cluster to be provisioned. Should be specified as 'v3\.[0-9]+'. If not set, will be used 'v3.11'.
-
-- `WORKSPACE` - from [other variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables). Create a directory in `$WORKSPACE/keys` and save your AWS ssh private key, it will be used on the newly created instance. The name of the key is captured from `$EC2_KEY`.
-  - The resulting ssh private key file should be accessible in `${WORKSPACE}/keys/${EC2_KEY}.pem`. This key can be used to ssh into the instance once is deployed.
+- `WORKSPACE` - from [other variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables). 
+  - Create a directory in `$WORKSPACE/keys` and save your AWS SSH private key, it will be used to access the newly created instance. The name of the key is captured from `$EC2_KEY`.
+  - The resulting SSH private key file should be accessible in `${WORKSPACE}/keys/${EC2_KEY}.pem`.
 
 ### Deploying OA cluster outside of CI :
 
-- Define all of the *required* [environment variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables), including the pre-requirements mentioned in the previous paragraph.
+- Define *required* [environment variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables), please ensure pre-requirements are satisfied.
 
 - To deploy an OA `ansible-playbook deploy_ocp3_cluster.yml -e prefix=name_for_instance`. You can specify deployment type with `-e oa_deployment_type=openshift-enterprise/origin`. Default is the enterprise one. When prefix is not specified, you `ansible_user` variable will be used.
 
@@ -110,22 +109,24 @@ _**Note:**_ Customer OCP environments are expected to be based on RHEL distribut
 
 ### List of other environment variables:
 
+- `OCP3_VERSION` - version of cluster to be provisioned. Should be specified as 'v3\.[0-9]+'. If not set, will be used 'v3.11'.
+
 - `SUB_USER` - redhat subscription username for account, which have access to the openshift bits. Allows to setup an `enterprise` and `origin` OA deployment.
 
-- `SUB_PASS` - password for the redhat subscriprion account.
+- `SUB_PASS` - password for the redhat subscription account.
 
 - `AWS_REGION` - region, in which all resources will be created.
 
 - `AWS_ACCESS_KEY_ID` - AWS access key id, which is used to access your AWS environment.
 
-- `AWS_SECRET_ACCESS_KEY` - secret, used for authentication.
+- `AWS_SECRET_ACCESS_KEY` - AWS secret access key, used for authentication.
 
-- `WORKSPACE` - Should specify a placement of workspace, which contains the `keys` directory, with all the ssh private and public keys used during the run are located. The name of the key is specified by the `EC2_KEY` variable. If was not specified, will be used the default value - `../`.
+- `WORKSPACE` - location of workspace directory. If not set, the default value is the directory where the playbook is run.
 
-- `EC2_KEY` - name of the ssh private key, which will be passed to the instance, and allow you to access the deployed instance via ssh. Set to `ci` by default. The key should be accessible at `${WORKSPACE}/keys/${EC2_KEY}.pem`.
+- `EC2_KEY` - name of the SSH private key, which will be passed to the instance, and allow you to access the deployed instance via ssh. Set to `ci` by default. The key should be accessible at `${WORKSPACE}/keys/${EC2_KEY}.pem`.
 
 - `CLUSTER_NAME` - prefix for a newly created AWS EC2 instance. When not specified, your ansible username will be used. All EC2 instances are named by the following convention: `$CLUSTER_NAME-<instance role>-3.(7-11)`.
 
-- `KUBECONFIG` - *optional*, if this environment variable is set, then the `oc` binary will use the configuration file from there to perform any operations on cluster. By default the `~/.kube/config` location is used. https://docs.openshift.com/container-platform/3.11/cli_reference/manage_cli_profiles.html
+- `KUBECONFIG` - *optional*, if this environment variable is set, then the `oc` binary will use the configuration file from there to perform any operations on cluster. By default the `~/.kube/config` is used. https://docs.openshift.com/container-platform/3.11/cli_reference/manage_cli_profiles.html
 
 - - - -
