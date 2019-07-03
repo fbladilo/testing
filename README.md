@@ -10,7 +10,7 @@ This repo contains ansible and CI related assets used for the OCP 3 to 4 migrati
 Jenkins pipelines are used to provide the logic necessary to orchestrate the build and execution of CI workflows. Each pipeline job can be parameterized to customize the behavior for the intended workflow, they are also in charge of providing notifications for each build, below are the supplied  [mig CI pipelines](https://github.com/fusor/mig-ci/tree/master/pipeline) with a brief description:
 
 | Pipeline | Purpose |
-| --- | --- |
+| -------- | --- |
 | `ocp3-agnosticd-base` | Deploys OCP3 using agnosticd, performs cluster sanity checks, multi-node cluster support |
 | `ocp3-oa-base` | Deploys OCP3 using openshift ansible, performs cluster sanity checks, all-in-one cluster |
 | `ocp3-origin3-dev-base` | Deploys OCP3 using [origin3-dev](https://github.com/fusor/origin3-dev.git), all-in-one cluster |
@@ -37,8 +37,8 @@ These are some of the parameters allowing the customizations of mig CI jobs :
 | `DEPLOYMENT_TYPE` | OCP3 deployment type | Could be `agnosticd`, `OA` or `cluster_up`|
 | `MIG_CONTROLLER_REPO` | source repository for mig-controller to test | |
 | `MIG_CONTROLLER_BRANCH` | source branch for mig-controller to test | |
-| `SUB_USER` | RH subscription username for account, which have access to the openshift bits | Only used in OA deployments |
-| `SUB_PASS` | RH subscription password | Only used in OA deployments |
+| `SUB_USER` | RH subscription username | Only used in OA deployments to access OCP bits |
+| `SUB_PASS` | RH subscription password | Only used in OA deployments to access OCP bits |
 | `CLEAN_WORKSPACE` | Clean Jenkins workspace after build | Boolean |
 | `EC2_TERMINATE_INSTANCES` | Terminate all instances on EC2 after build | Boolean, clean up of clusters and other CI EC2 related instances |
 
