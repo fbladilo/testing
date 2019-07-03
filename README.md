@@ -3,11 +3,11 @@
 
 ## Purpose
 
-This repo contains ansible and CI related assets used for the OCP 3 to 4 migration project, the primary use case for these tools is to integrate with Jenkins and allow the creation of all necessary CI workflows.It will consist of several ansible playbooks, which will prepare a environment for migration purposes. This involves provisioning customer-like cluster deployments with [OA installer](https://github.com/openshift/openshift-ansible), and setup of the migration tools from [mig-controller](https://github.com/fusor/mig-controller).
+This repo contains ansible and CI related assets used for the OCP 3 to 4 migration project, the primary use case for these tools is to integrate with Jenkins and allow the creation of all necessary CI workflows.It will consist of several ansible playbooks, which will prepare a environment for migration purposes. This involves provisioning customer-like cluster deployments with [OA installer](https://github.com/openshift/openshift-ansible), and setup of the cluster migration tools from [mig-controller](https://github.com/fusor/mig-controller).
 
 ## Pipelines 
 
-Jenkins pipelines are used to provide the logic necessary to orchestrate the build and execution of CI workflows. Each pipeline job can be parameterized to customize the behavior for the intended workflow, they are also in charge of providing notifications for each build, below are the supplied  [mig CI pipelines](https://github.com/fusor/mig-ci/tree/master/pipeline) with a brief description:
+Jenkins pipelines are used to provide the logic necessary to orchestrate the build and execution of CI workflows. Each pipeline job can be parameterized to customize the behavior for the intended workflow, they are also responsible of providing notifications for each build, below are the supplied  [mig CI pipelines](https://github.com/fusor/mig-ci/tree/master/pipeline) with a brief description:
 
 | Pipeline | Purpose |
 | --- | --- |
@@ -17,11 +17,11 @@ Jenkins pipelines are used to provide the logic necessary to orchestrate the bui
 | `ocp4-base` | Deploys OCP4 and performs cluster sanity checks |
 | `parallel-base` | Deploys OCP3, OCP4, NFS server in parallel, installs cluster application migration tools and executes e2e migration tests|
 
-### Pipeline CI jobs logic
+### CI job logic
 
-The use of _**trigger pipeline jobs**_ which are parameterized is key to the structure of the CI workflows, trigger jobs can for instance watch repositories for activity and execute _**base pipelines**_ to run a CI workflow. A good example are trigger pipelines watching the [mig-controller repo](https://github.com/fusor/mig-controller) for changes and executing the [parallel base pipeline](https://github.com/fusor/mig-ci/blob/master/pipeline/parallel-base.groovy) with [e2e tests](https://github.com/fusor/mig-e2e)
+The use of _**trigger jobs**_ which are parameterized is key to the structure of the CI workflows, trigger jobs can for instance watch repositories for activity and execute _**base pipelines**_ to run a CI workflow. A good example are trigger jobs watching the [mig-controller repo](https://github.com/fusor/mig-controller) for changes and executing the [parallel base pipeline](https://github.com/fusor/mig-ci/blob/master/pipeline/parallel-base.groovy) with [e2e tests](https://github.com/fusor/mig-e2e)
 
-### Pipeline CI job parameters
+### CI job parameters
 
 Below are some of the parameters allowing the customization of mig CI jobs :
 
@@ -50,11 +50,11 @@ The migration controller e2e tests are supplied in the [mig-e2e repo](https://gi
 
 ### Debug and cleanup of CI jobs
 
-The `EC2_TERMINATE_INSTANCES` and `CLEAN_WORKSPACE` boolean parameters can be used to avoid the termination of clusters in case you want to debug the migration after the run: 
+The `EC2_TERMINATE_INSTANCES` and `CLEAN_WORKSPACE` boolean parameters can be used to avoid the termination of clusters in case you want to debug a migration job after the run: 
 
-1) Ssh to jenkins host
-2) Go to `/var/lib/jenkins/workspace`, and enter the `parallel-mig-ci-${BUILD_NUMBER}` dir. The `kubeconfigs` directory will contain `KUBECONFIG` files with opened sessions for both source and target cluster. You can utilize them with `export KUBECONFIG=$(pwd)/kubeconfigs/ocp-v3.11-kubeconfig`.
-3) After finishing those steps you can remove deployments manually by executing `./destroy_env.sh`.
+1) SSH to jenkins host
+2) Go to `/var/lib/jenkins/workspace`, and enter the `parallel-mig-ci-${BUILD_NUMBER}` dir. The `kubeconfigs` directory will contain `KUBECONFIG` files with active sessions for both source and target clusters. You can utilize them by `export KUBECONFIG=$(pwd)/kubeconfigs/ocp-v3.11-kubeconfig`.
+3) Once done debugging, you can remove deployments manually by executing `./destroy_env.sh`.
 
 ## External NFS server setup on AWS
 
@@ -70,8 +70,6 @@ This task could be executed on every cluster that will need access to the NFS se
 When you are finished, just run the playbook to destroy NFS AWS instance:
 - `ansible-playbook nfs_server_destroy.yml`
 
-These playbooks have been validated with both [all-in-one AWS deployment](https://github.com/fusor/mig-ci#ocp3-all-in-one-deployment-on-aws) and [origin3-dev](https://github.com/fusor/origin3-dev/).
-
 ## OCP3 agnosticd multinode in AWS
 
 This type of deployment is used in [parallel-base](https://github.com/fusor/mig-ci/blob/master/pipeline/parallel-base.groovy) pipeline, and is used for creation of multinode cluster. To setup a similar environment outside of CI, please refer to the [official](https://github.com/redhat-cop/agnosticd) doc.
@@ -82,7 +80,7 @@ In order to execute an OCP3 all-in-one deployment, you need to supply SSH keys a
 
 Pre-requirements :
 
-- `WORKSPACE` - from [other variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables). 
+- `WORKSPACE` - from [other variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables).
   - Create a directory in `$WORKSPACE/keys` and save your AWS SSH private key, it will be used to access the newly created instance. The name of the key is captured from `$EC2_KEY`.
   - The resulting SSH private key file should be accessible in `${WORKSPACE}/keys/${EC2_KEY}.pem`.
 
