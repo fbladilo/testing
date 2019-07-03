@@ -10,7 +10,7 @@ This repo contains ansible and CI related assets used for the OCP 3 to 4 migrati
 Jenkins pipelines are used to provide the logic necessary to orchestrate the build and execution of CI workflows. Each pipeline job can be parameterized to customize the behavior for the intended workflow, they are also in charge of providing notifications for each build, below are the supplied  [mig CI pipelines](https://github.com/fusor/mig-ci/tree/master/pipeline) with a brief description:
 
 | Pipeline | Purpose |
-| -------- | --- |
+| -------- | ------- |
 | `ocp3-agnosticd-base` | Deploys OCP3 using agnosticd, performs cluster sanity checks, multi-node cluster support |
 | `ocp3-oa-base` | Deploys OCP3 using openshift ansible, performs cluster sanity checks, all-in-one cluster |
 | `ocp3-origin3-dev-base` | Deploys OCP3 using [origin3-dev](https://github.com/fusor/origin3-dev.git), all-in-one cluster |
@@ -21,7 +21,7 @@ Jenkins pipelines are used to provide the logic necessary to orchestrate the bui
 
 The use of *trigger pipeline jobs* which are parameterized is key to the structure of the CI workflows, trigger jobs can for instance watch repositories for activity and execute *base pipelines* to run a CI workflow. A good example are trigger pipelines watching the [mig-controller repo](https://github.com/fusor/mig-controller) for changes and executing the [parallel base pipeline](https://github.com/fusor/mig-ci/blob/master/pipeline/parallel-base.groovy) with [e2e tests](https://github.com/fusor/mig-e2e)
 
-### Pipeline job parameters
+### Pipeline CI job parameters
 
 These are some of the parameters allowing the customizations of mig CI jobs :
 
