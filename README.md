@@ -80,20 +80,20 @@ This type of deployment is used in [parallel-base](https://github.com/fusor/mig-
 
 In order to execute an OCP3 all-in-one deployment, you need to define several environment variables.
 
-Task specific:
+Pre-requirements :
 
 - `OCP3_VERSION` - version of cluster to be provisioned. Should be specified as 'v3\.[0-9]+'. If not set, will be used 'v3.11'.
 
 - `WORKSPACE` - from [other variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables). Create a directory in `$WORKSPACE/keys` and save your AWS ssh private key, it will be used on the newly created instance. The name of the key is captured from `$EC2_KEY`.
-  - The ssh private key file should be accessible in `${WORKSPACE}/keys/${EC2_KEY}.pem`. This key can be used to ssh into the instance once is deployed.
+  - The resulting ssh private key file should be accessible in `${WORKSPACE}/keys/${EC2_KEY}.pem`. This key can be used to ssh into the instance once is deployed.
 
 ### Deploying OA cluster outside of CI :
 
-- Setup all of the required [environment variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables), including the ones mentioned in the previous paragraph.
+- Define all of the *required* [environment variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables), including the pre-requirements mentioned in the previous paragraph.
 
 - To deploy an OA `ansible-playbook deploy_ocp3_cluster.yml -e prefix=name_for_instance`. You can specify deployment type with `-e oa_deployment_type=openshift-enterprise/origin`. Default is the enterprise one. When prefix is not specified, you `ansible_user` variable will be used.
 
-If you want to select the upstream version of openshift, you can add `-e oa_deployment_type=origin` tag to previous step.
+If you want to select the upstream version of openshift, you can add `-e oa_deployment_type=origin` to the previous step.
 
 - To destroy the instance and all attached resources `ansible-playbook destroy_ocp3_cluster.yml -e prefix=name_for_instance`.
 
@@ -122,12 +122,10 @@ _**Note:**_ Customer OCP environments are expected to be based on RHEL distribut
 
 - `WORKSPACE` - Should specify a placement of workspace, which contains the `keys` directory, with all the ssh private and public keys used during the run are located. The name of the key is specified by the `EC2_KEY` variable. If was not specified, will be used the default value - `../`.
 
-- `EC2_KEY` - name of the ssh private key, which will be passed to the instance, and allow you to access the instance via ssh in future. Set to `ci` by default. The key should be discoverable with `${WORKSPACE}/keys/${EC2_KEY}.pem`.
+- `EC2_KEY` - name of the ssh private key, which will be passed to the instance, and allow you to access the deployed instance via ssh. Set to `ci` by default. The key should be accessible at `${WORKSPACE}/keys/${EC2_KEY}.pem`.
 
-- `EC2_REGION` - region, where all resources will be created.
+- `CLUSTER_NAME` - prefix for a newly created AWS EC2 instance. When not specified, your ansible username will be used. All EC2 instances are named by the following convention: `$CLUSTER_NAME-<instance role>-3.(7-11)`.
 
-- `CLUSTER_NAME` - this variable is used in multiple location. In this scenario it's perpouse, is to specify prefix for a newly created AWS EC2 instance. When it is not specified, your ansible username will be used. All EC2 instances are named by the following convention: `$CLUSTER_NAME-<instance role>-3.(7-11)`.
-
-- `KUBECONFIG` - if this envrironment variable is set, then the `oc` binary will use the configuration file from there to perform any operations on cluster. By default the `~/.kube/config` location is used. https://docs.openshift.com/container-platform/3.11/cli_reference/manage_cli_profiles.html
+- `KUBECONFIG` - *optional*, if this environment variable is set, then the `oc` binary will use the configuration file from there to perform any operations on cluster. By default the `~/.kube/config` location is used. https://docs.openshift.com/container-platform/3.11/cli_reference/manage_cli_profiles.html
 
 - - - -
