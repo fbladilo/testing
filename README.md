@@ -10,7 +10,7 @@ This repo contains ansible and CI related assets used for the OCP 3 to 4 migrati
 Jenkins pipelines are used to provide the logic necessary to orchestrate the build and execution of CI workflows. Each pipeline job can be parameterized to customize the behavior for the intended workflow, they are also in charge of providing notifications for each build, below are the supplied  [MIG ci pipelines](https://github.com/fusor/mig-ci/tree/master/pipeline) with a brief description:
 
 | Pipeline | Purpose |
-| --- | --- |
+| ------ | --- |
 | `ocp3-agnosticd-base.groovy` | Deploys OCP3 using agnosticd, performs cluster sanity checks, multi-node cluster support |
 | `ocp3-oa-base.groovy` | Deploys OCP3 using openshift ansible, performs cluster sanity checks, all-in-one cluster |
 | `ocp3-origin3-dev-base.groovy` | Deploys OCP3 using [origin3-dev](https://github.com/fusor/origin3-dev.git), all-in-one cluster |
@@ -26,7 +26,7 @@ The use of *trigger pipeline jobs* which are parameterized is key to the structu
 These are some of the parameters allowing the customizations of mig CI jobs :
 
 | Parameter | Purpose | Notes |
-| ----- | ----- | -----|
+| ----- | ---------- | ---------- |
 | `AWS_REGION` | AWS region for clusters to deploy | |
 | `OCP3_VERSION`| OCP3 version to deploy | Default is v3.11 |
 | `OCP4_VERSION`| OCP4 version to deploy | Default is v4.1 |
@@ -42,11 +42,11 @@ These are some of the parameters allowing the customizations of mig CI jobs :
 | `CLEAN_WORKSPACE` | Clean Jenkins workspace after build | Boolean |
 | `EC2_TERMINATE_INSTANCES` | Terminate all instances on EC2 after build | Boolean, clean up of clusters and any other related instances |
 
-_**Note:**_ For a full list of all possible parameters please inspect each pipeline script
+_**Note:**_ **For a full list of all possible parameters please inspect each pipeline script**
 
 ### Migration controller e2e tests
 
-The migration controller e2e tests are supplied in the [mig-e2e repo](https://github.com/fusor/mig-e2e), the tests are based on [sample scenarios](https://github.com/fusor/mig-controller/tree/master/docs/scenarios) from the mig-controller repo and are run during the last stage of CI jobs.
+The migration controller e2e tests are supplied in the [mig-e2e repo](https://github.com/fusor/mig-e2e), the tests are based on [mig controller sample scenarios](https://github.com/fusor/mig-controller/tree/master/docs/scenarios) and are executed during the last stage of CI jobs.
 
 ### Debug and cleanup of CI jobs
 
