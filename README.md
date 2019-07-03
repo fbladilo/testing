@@ -3,14 +3,14 @@
 
 ## Purpose
 
-This repo contains ansible and CI related assets used for the OCP 3 to 4 migration project, the primary use case for these tools is to integrate with Jenkins and allow the creation of all necessary CI workflows. It will consist of several ansible playbooks, which will prepare a environment for migration purposes. This involves provisioning customer-like cluster deployments with [OA installer](https://github.com/openshift/openshift-ansible), and setup of the migration tools from [mig-controller](https://github.com/fusor/mig-controller).
+This repo contains ansible and CI related assets used for the OCP 3 to 4 migration project, the primary use case for these tools is to integrate with Jenkins and allow the creation of all necessary CI workflows.It will consist of several ansible playbooks, which will prepare a environment for migration purposes. This involves provisioning customer-like cluster deployments with [OA installer](https://github.com/openshift/openshift-ansible), and setup of the migration tools from [mig-controller](https://github.com/fusor/mig-controller).
 
 ## Pipelines 
 
 Jenkins pipelines are used to provide the logic necessary to orchestrate the build and execution of CI workflows. Each pipeline job can be parameterized to customize the behavior for the intended workflow, they are also in charge of providing notifications for each build, below are the supplied  [mig CI pipelines](https://github.com/fusor/mig-ci/tree/master/pipeline) with a brief description:
 
 | Pipeline | Purpose |
-| ---------------------- | --- |
+| --- | --- |
 | `ocp3-agnosticd-base` | Deploys OCP3 using agnosticd, performs cluster sanity checks, multi-node cluster support |
 | `ocp3-oa-base` | Deploys OCP3 using openshift ansible, performs cluster sanity checks, all-in-one cluster |
 | `ocp3-origin3-dev-base` | Deploys OCP3 using [origin3-dev](https://github.com/fusor/origin3-dev.git), all-in-one cluster |
@@ -19,7 +19,7 @@ Jenkins pipelines are used to provide the logic necessary to orchestrate the bui
 
 ### Pipeline CI jobs logic
 
-The use of *trigger pipeline jobs* which are parameterized is key to the structure of the CI workflows, trigger jobs can for instance watch repositories for activity and execute *base pipelines* to run a CI workflow. A good example are trigger pipelines watching the [mig-controller repo](https://github.com/fusor/mig-controller) for changes and executing the [parallel base pipeline](https://github.com/fusor/mig-ci/blob/master/pipeline/parallel-base.groovy) with [e2e tests](https://github.com/fusor/mig-e2e)
+The use of _**trigger pipeline jobs**_ which are parameterized is key to the structure of the CI workflows, trigger jobs can for instance watch repositories for activity and execute _**base pipelines**_ to run a CI workflow. A good example are trigger pipelines watching the [mig-controller repo](https://github.com/fusor/mig-controller) for changes and executing the [parallel base pipeline](https://github.com/fusor/mig-ci/blob/master/pipeline/parallel-base.groovy) with [e2e tests](https://github.com/fusor/mig-e2e)
 
 ### Pipeline CI job parameters
 
@@ -30,10 +30,10 @@ Below are some of the parameters allowing the customization of mig CI jobs :
 | `AWS_REGION` | AWS region for clusters to deploy | |
 | `OCP3_VERSION`| OCP3 version to deploy | Default is v3.11 |
 | `OCP4_VERSION`| OCP4 version to deploy | Default is v4.1 |
-| `NODE_COUNT` | Number of compute nodes to create | Will be the same for source and target clusters |
-| `MASTER_COUNT` | Number of master nodes to create | Will be the same for source and target clusters |
+| `NODE_COUNT` | Number of compute nodes to create | Same for source and target clusters, does not apply to OA/origin3-dev |
+| `MASTER_COUNT` | Number of master nodes to create | Same for source and target clusters does not apply to OA/origin3-dev |
 | `CLUSTER_NAME` | Name of the cluster to deploy | The final deployment will use the following convention: `${CLUSTER_NAME}-v3-${BUILD_NUMBER}-${OCP3_VERSION}`. In AWS you can this value on instance tags GUID label|
-| `EC2_KEY` | Name of ssh public and private key, which will be imported in OCP3 cluster and allow ssh access | By default is `ci`, but for manual run is recomended `libra`|
+| `EC2_KEY` | Name of SSH public and private key, will be used in OCP clusters to allow ssh access | By default is `ci`, outside CI `libra` is recommended |
 | `DEPLOYMENT_TYPE` | OCP3 deployment type | Could be `agnosticd`, `OA` or `cluster_up`|
 | `MIG_CONTROLLER_REPO` | source repository for mig-controller to test | |
 | `MIG_CONTROLLER_BRANCH` | source branch for mig-controller to test | |
@@ -63,14 +63,14 @@ In order to demonstrate the migration of PV resources, you can deploy an externa
 Instance creation and NFS server setup is handled by the following command:
 - `ansible-playbook nfs_server_deploy.yml`
 
-From that moment you have the NFS server running. The next step is to login into the cluster, where you need to provision the PV resources. Then you are ready to create the PV resources on the cluster by running:
+Once the NFS server running, the next step is to login into the cluster, where you need to provision the PV resources. Create the PV resources on the cluster by running:
 - `ansible-playbook nfs_provision_pvs.yml`
-This task could be executed repetitively, for every cluster you need to bond with the NFS server.
+This task could be executed on every cluster that will need access to the NFS server.
 
 When you are finished, just run the playbook to destroy NFS AWS instance:
 - `ansible-playbook nfs_server_destroy.yml`
 
-Functionality of this tool is tested with both [all-in-one](https://github.com/fusor/mig-ci#ocp3-all-in-one-deployment-on-aws) AWS deployment, and [origin3-dev](https://github.com/fusor/origin3-dev/).
+These playbooks have been validated with both [all-in-one](https://github.com/fusor/mig-ci#ocp3-all-in-one-deployment-on-aws) AWS deployment, and [origin3-dev](https://github.com/fusor/origin3-dev/).
 
 ## OCP3 agnosticd multinode in AWS
 
