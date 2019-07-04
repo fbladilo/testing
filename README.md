@@ -30,8 +30,8 @@ Below are some of the parameters allowing the customization of mig CI jobs :
 | `AWS_REGION` | AWS region for clusters to deploy | |
 | `OCP3_VERSION`| OCP3 version to deploy | Default is v3.11 |
 | `OCP4_VERSION`| OCP4 version to deploy | Default is v4.1 |
-| `NODE_COUNT` | Number of compute nodes to create | Same for source and target clusters, does not apply to OA/origin3-dev |
-| `MASTER_COUNT` | Number of master nodes to create | Same for source and target clusters does not apply to OA/origin3-dev |
+| `NODE_COUNT` | Number of compute nodes to create | Same for source and target clusters, does not affect OA/origin3-dev clusters |
+| `MASTER_COUNT` | Number of master nodes to create | Same for source and target clusters, does not affect OA/origin3-dev clusters |
 | `CLUSTER_NAME` | Name of the cluster to deploy | The final deployment will use the following convention: `${CLUSTER_NAME}-v3-${BUILD_NUMBER}-${OCP3_VERSION}`. In AWS you can this value on instance tags GUID label|
 | `EC2_KEY` | Name of SSH public and private key, will be used in OCP clusters to allow ssh access | By default is `ci`, outside CI `libra` is recommended |
 | `DEPLOYMENT_TYPE` | OCP3 deployment type | Could be `agnosticd`, `OA` or `cluster_up`|
@@ -39,7 +39,7 @@ Below are some of the parameters allowing the customization of mig CI jobs :
 | `MIG_CONTROLLER_BRANCH` | source branch for mig-controller to test | |
 | `SUB_USER` | RH subscription username | Only used in OA deployments to access OCP bits |
 | `SUB_PASS` | RH subscription password | Only used in OA deployments to access OCP bits |
-| `CLEAN_WORKSPACE` | Clean Jenkins workspace after build | Boolean |
+| `CLEAN_WORKSPACE` | Clean Jenkins workspace after build | |
 | `EC2_TERMINATE_INSTANCES` | Terminate all instances on EC2 after build | Boolean, clean up of clusters and other CI EC2 related instances |
 
 _**Note:**_ **For a full list of all possible parameters please inspect each pipeline script**
@@ -50,7 +50,7 @@ The migration controller e2e tests are supplied in the [mig-e2e repo](https://gi
 
 ### Debug and cleanup of CI jobs
 
-The `EC2_TERMINATE_INSTANCES` and `CLEAN_WORKSPACE` boolean parameters can be used to avoid the termination of clusters in case you want to debug a migration job after the run: 
+The `EC2_TERMINATE_INSTANCES` and `CLEAN_WORKSPACE` boolean parameters can be used to **avoid** the termination of clusters and the cleanup of Jenkins workspace in case you want to debug a migration job after the run: 
 
 1) SSH to jenkins host
 2) Go to `/var/lib/jenkins/workspace`, and enter the `parallel-mig-ci-${BUILD_NUMBER}` dir. The `kubeconfigs` directory will contain `KUBECONFIG` files with active sessions for both source and target clusters. You can utilize them by `export KUBECONFIG=$(pwd)/kubeconfigs/ocp-v3.11-kubeconfig`.
@@ -58,7 +58,7 @@ The `EC2_TERMINATE_INSTANCES` and `CLEAN_WORKSPACE` boolean parameters can be us
 
 ## External NFS server setup on AWS
 
-In order to demonstrate the migration of PV resources, you can deploy an external NFS server on AWS. The server will have a public IP, and could be pointed from both locations - source OCP3 and target OCP4 clusters.
+In order to demonstrate the migration of PV resources, you can deploy an external NFS server on AWS. The server will be provisioned with a public IP, and could be pointed from both locations - source OCP3 and target OCP4 clusters.
 
 Instance creation and NFS server setup is handled by the following command:
 - `ansible-playbook nfs_server_deploy.yml`
@@ -76,7 +76,7 @@ This type of deployment is used in [parallel-base](https://github.com/fusor/mig-
 
 ## OCP3 OA all-in-one deployment on AWS
 
-In order to execute an OCP3 all-in-one deployment, you need to supply SSH keys and define several environmental variables:
+In order to execute an OCP3 all-in-one deployment, you need to supply SSH keys and define several environmental variables.
 
 Pre-requirements :
 
@@ -86,7 +86,7 @@ Pre-requirements :
 
 ### Deploying OA cluster outside of CI :
 
-- Define *required* [environment variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables), please ensure pre-requirements are satisfied.
+- Define *required* [environment variables](https://github.com/fusor/mig-ci#list-of-other-environment-variables), please ensure _pre-requirements_ are satisfied.
 
 - To deploy an OA `ansible-playbook deploy_ocp3_cluster.yml -e prefix=name_for_instance`. You can specify deployment type with `-e oa_deployment_type=openshift-enterprise/origin`. Default is the enterprise one. When prefix is not specified, you `ansible_user` variable will be used.
 
@@ -103,7 +103,7 @@ Example:
 - `ansible-playbook deploy_ocp3_cluster.yml -e @config/adhoc_vars.yml`
 - `ansible-playbook destroy_ocp3_cluster.yml -e @config/adhoc_vars.yml`
 
-_**Note:**_ Customer OCP environments are expected to be based on RHEL distributions. By default the RHEL7 does not have an access to the [official OpenShift bits](https://docs.openshift.com/enterprise/3.0/install_config/install/prerequisites.html#software-prerequisites) for the OA deployment. You must supply a RH account with a subscription that has access to the OCP official bits.
+_**Note:**_ By default the RHEL7 does not have an access to the [official OpenShift bits](https://docs.openshift.com/enterprise/3.0/install_config/install/prerequisites.html#software-prerequisites) for the OA deployment. You must supply a RH account with a subscription that has access to the OCP official bits.
 
 ### List of other environment variables:
 
@@ -113,7 +113,7 @@ _**Note:**_ Customer OCP environments are expected to be based on RHEL distribut
 
 - `SUB_PASS` - password for the redhat subscription account.
 
-- `AWS_REGION` - region, in which all resources will be created.
+- `AWS_REGION` - AWS region, in which all resources will be created.
 
 - `AWS_ACCESS_KEY_ID` - AWS access key id, which is used to access your AWS environment.
 
