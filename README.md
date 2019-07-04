@@ -27,20 +27,20 @@ Below are some of the parameters allowing the customization of mig CI jobs :
 
 | Parameter | Purpose | Notes |
 | --- | --- | --- |
-| `AWS_REGION` | AWS region for clusters to deploy | |
+| `AWS_REGION` | AWS region for clusters to deploy | Default varies based on pipeline |
 | `OCP3_VERSION`| OCP3 version to deploy | Default is v3.11 |
 | `OCP4_VERSION`| OCP4 version to deploy | Default is v4.1 |
 | `NODE_COUNT` | Number of compute nodes to create | Same for source and target clusters, does not affect OA/origin3-dev clusters |
 | `MASTER_COUNT` | Number of master nodes to create | Same for source and target clusters, does not affect OA/origin3-dev clusters |
 | `CLUSTER_NAME` | Name of the cluster to deploy | The final deployment will use the following convention: `${CLUSTER_NAME}-v3-${BUILD_NUMBER}-${OCP3_VERSION}`. In AWS you can this value on instance tags GUID label|
-| `EC2_KEY` | Name of SSH public and private key, will be used in OCP clusters to allow ssh access | By default is `ci`, outside CI `libra` is recommended |
+| `EC2_KEY` | Name of SSH public and private key, will be used in OCP clusters to allow ssh access | Default is `ci`, outside CI `libra` is recommended |
 | `DEPLOYMENT_TYPE` | OCP3 deployment type | Could be `agnosticd`, `OA` or `cluster_up`|
-| `MIG_CONTROLLER_REPO` | source repository for mig-controller to test | |
-| `MIG_CONTROLLER_BRANCH` | source branch for mig-controller to test | |
+| `MIG_CONTROLLER_REPO` | source repository for mig-controller to test | Default is fusor |
+| `MIG_CONTROLLER_BRANCH` | source branch for mig-controller to test | Default is HEAD |
 | `SUB_USER` | RH subscription username | Only used in OA deployments to access OCP bits |
 | `SUB_PASS` | RH subscription password | Only used in OA deployments to access OCP bits |
-| `CLEAN_WORKSPACE` | Clean Jenkins workspace after build | |
-| `EC2_TERMINATE_INSTANCES` | Terminate all instances on EC2 after build | Boolean, clean up of clusters and other CI EC2 related instances |
+| `CLEAN_WORKSPACE` | Clean Jenkins workspace after build | Default is true |
+| `EC2_TERMINATE_INSTANCES` | Terminate all instances on EC2 after build | Default is true |
 
 _**Note:**_ **For a full list of all possible parameters please inspect each pipeline script**
 
