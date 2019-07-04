@@ -11,8 +11,8 @@ Jenkins pipelines are used to provide the logic necessary to orchestrate the bui
 
 | Pipeline | Purpose |
 | --- | --- |
-| `ocp3-agnosticd-base` | Deploys OCP3 using agnosticd, performs cluster sanity checks, multi-node cluster support |
-| `ocp3-oa-base` | Deploys OCP3 using openshift ansible, performs cluster sanity checks, all-in-one cluster |
+| `ocp3-agnosticd-base` | Deploys OCP3 using [agnosticd](https://github.com/fbladilo/testing#ocp3-agnosticd-multinode-in-aws), performs cluster sanity checks, multi-node cluster support |
+| `ocp3-oa-base` | Deploys OCP3 using [openshift ansible](https://github.com/fbladilo/testing#ocp3-oa-all-in-one-deployment-on-aws), performs cluster sanity checks, all-in-one cluster |
 | `ocp3-origin3-dev-base` | Deploys OCP3 using [origin3-dev](https://github.com/fusor/origin3-dev.git), all-in-one cluster |
 | `ocp4-base` | Deploys OCP4 and performs cluster sanity checks |
 | `parallel-base` | Deploys OCP3, OCP4, NFS server in parallel, installs cluster application migration tools and executes e2e migration tests|
@@ -27,13 +27,13 @@ Below are some of the parameters allowing the customization of mig CI jobs :
 
 | Parameter | Purpose | Notes |
 | --- | --- | --- |
-| `AWS_REGION` | AWS region for clusters to deploy | Default varies based on pipeline |
+| `AWS_REGION` | AWS region for resources to deploy | Default varies based on pipeline |
 | `OCP3_VERSION`| OCP3 version to deploy | Default is v3.11 |
 | `OCP4_VERSION`| OCP4 version to deploy | Default is v4.1 |
 | `NODE_COUNT` | Number of compute nodes to create | Same for source and target clusters, does not affect OA/origin3-dev clusters |
 | `MASTER_COUNT` | Number of master nodes to create | Same for source and target clusters, does not affect OA/origin3-dev clusters |
 | `CLUSTER_NAME` | Name of the cluster to deploy | The final deployment will use the following convention: `${CLUSTER_NAME}-v3-${BUILD_NUMBER}-${OCP3_VERSION}`. In AWS you can this value on instance tags GUID label|
-| `EC2_KEY` | Name of SSH public and private key, will be used in OCP clusters to allow ssh access | Default is `ci`, outside CI `libra` is recommended |
+| `EC2_KEY` | Name of SSH public and private key | Default is `ci`, outside CI `libra` is recommended. Will be used to allow SSH access to instances |
 | `DEPLOYMENT_TYPE` | OCP3 deployment type | Could be `agnosticd`, `OA` or `cluster_up`|
 | `MIG_CONTROLLER_REPO` | source repository for mig-controller to test | Default is fusor |
 | `MIG_CONTROLLER_BRANCH` | source branch for mig-controller to test | Default is HEAD |
