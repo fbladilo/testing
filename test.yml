@@ -1,0 +1,8 @@
+- hosts: localhost
+  tasks:
+    - name: Run system uptime
+      shell: "uptime"
+      register: uptime_output
+
+    - debug:
+        var: uptime_output
