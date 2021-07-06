@@ -26,7 +26,10 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Get Operator SDK
-        run: curl -LO ${{ env.OPERATOR_SDK_DL_URL }}/${{ env.OPERATOR_SDK_VERSION }}/operator-sdk_linux_x86_64 && chmod +x operator-sdk_* && mv operator-sdk_linux_x86_64 operator-sdk
+        run: curl -LO ${{ env.OPERATOR_SDK_DL_URL }}/${{ env.OPERATOR_SDK_VERSION }}/operator-sdk_linux_amd64 && chmod +x operator-sdk_* && mv operator-sdk_linux_amd64 operator-sdk
 
-      - name: Run Operator SDK
+      - name: Check SDK
         run: ls -la
+
+      - name: Run SDK
+        run: ./operator-sdk version
