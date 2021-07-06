@@ -9,7 +9,7 @@ metadata:
     description: >-
       Facilitates migration of VM workloads to OpenShift Virtualization
     categories: 'Modernization & Migration'
-    containerImage: quay.io/konveyor/forklift-operator:blah
+    containerImage: quay.io/konveyor/forklift-operator:latest
     createdAt: 2020-06-16T11:21:00Z
     repository: https://github.com/konveyor/forklift-operator
     operatorframework.io/initialization-resource: |-
