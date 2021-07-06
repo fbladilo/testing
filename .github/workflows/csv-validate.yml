@@ -29,4 +29,4 @@ jobs:
         run: curl -LO ${{ env.OPERATOR_SDK_DL_URL }}/${{ env.OPERATOR_SDK_VERSION }}/operator-sdk_linux_x86_64 && chmod +x operator-sdk_* && mv operator-sdk_linux_x86_64 operator-sdk
 
       - name: Run Operator SDK
-        run: ./operator-sdk version
+        run: ls -la
