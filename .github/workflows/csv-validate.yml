@@ -1,0 +1,25 @@
+name: Validate CSV
+
+on:
+  pull_request:
+    branches:
+    - master
+    - main
+    - 'release-*.*.*'
+    paths:
+    - 'bundle/*'
+    workflow_dispatch:
+
+env:
+  OP_SDK_VERSION: v1.8.0
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      package: write
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
