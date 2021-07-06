@@ -17,7 +17,7 @@ metadata:
         "apiVersion": "forklift.konveyor.io/v1beta1",
         "kind": "ForkliftController",
         "metadata": {
-          "name": "forklift-controller",
+          "name": "forklift-controller-sanmple",
           "namespace": "konveyor-forklift"
         },
         "spec": {
