@@ -1,4 +1,4 @@
-name: Validate CSV
+name: Validate bundle CSV
 
 on:
   pull_request:
@@ -6,15 +6,15 @@ on:
     - master
     - main
     - 'release-*.*.*'
-#    paths:
-#    - 'bundle/*'
+    paths:
+    - 'bundle/**'
     workflow_dispatch:
 
 env:
   OPERATOR_SDK_DL_URL: https://github.com/operator-framework/operator-sdk/releases/download
   OPERATOR_SDK_VERSION: v1.8.0
 jobs:
-  validate:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -22,14 +22,11 @@ jobs:
     steps:
       - name: Checkout PR branch
         uses: actions/checkout@v2
-#        with:
-#          ref: ${{ github.head_ref }}
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Get Operator SDK
         run: curl -LO ${{ env.OPERATOR_SDK_DL_URL }}/${{ env.OPERATOR_SDK_VERSION }}/operator-sdk_linux_amd64 && chmod +x operator-sdk_* && mv operator-sdk_linux_amd64 operator-sdk
-
-      - name: Check SDK
-        run: pwd ; ls -la ; git remote -v ; git branch
 
       - name: Run SDK
         run: ./operator-sdk bundle validate ./bundle
