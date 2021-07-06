@@ -11,7 +11,8 @@ on:
     workflow_dispatch:
 
 env:
-  OP_SDK_VERSION: v1.8.0
+  OPERATOR_SDK_DL_URL: https://github.com/operator-framework/operator-sdk/releases/download
+  OPERATOR_SDK_VERSION: v1.8.0
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -23,3 +24,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
+
+      - name: Get Operator SDK
+        run: curl -LO ${{ env.OPERATOR_SDK_DL_URL }}/${{ env.OPERATOR_SDK_VERSION }}/operator-sdk_linux_x86_64 && chmod +x operator-sdk_* && mv operator-sdk_linux_x86_64 operator-sdk
+
+      - name: Run Operator SDK
+        run: ./operator-sdk version
