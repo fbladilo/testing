@@ -6,8 +6,8 @@ on:
     - master
     - main
     - 'release-*.*.*'
-    paths:
-    - 'bundle/*'
+#    paths:
+#    - 'bundle/*'
     workflow_dispatch:
 
 env:
